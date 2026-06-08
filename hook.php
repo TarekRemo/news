@@ -354,8 +354,10 @@ function plugin_news_uninstall()
     $DB->doQuery('DROP TABLE IF EXISTS `glpi_plugin_news_profiles`;');
     $DB->doQuery('DROP TABLE IF EXISTS `glpi_plugin_news_alerts_users`;');
     $DB->doQuery('DROP TABLE IF EXISTS `glpi_plugin_news_alerts_targets`;');
-    $DB->doQuery("DELETE FROM `glpi_profiles` WHERE `name` LIKE '%plugin_news%';");
-    $DB->doQuery("DELETE FROM `glpi_displaypreferences` WHERE `itemtype` LIKE '%PluginNews%';");
+    ProfileRight::deleteProfileRights([PluginNewsAlert::$rightname]);
+    (new DisplayPreference())->deleteByCriteria([
+        'itemtype' => ['LIKE', '%PluginNews%'],
+    ]);
 
     return true;
 }
