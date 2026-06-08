@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Force closed alerts display after alert update.
+
 ## [1.14.0] - 2026-04-30
 
 ### Added
