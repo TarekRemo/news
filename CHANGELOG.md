@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Clean display preferences and profile rights table on uninstall
+
 ## [1.14.0] - 2026-04-30
 
 ### Added
