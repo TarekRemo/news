@@ -115,21 +115,18 @@ class PluginNewsAlertTest extends DbTestCase
         $alert_user_1_id = $alert_user_1->getID();
         $alert_user_2_id = $alert_user_2->getID();
 
-        $result = $alert->update(['id' => $alert_id, 'name' => 'Alert with hidden users (updated)']);
-        $this->assertTrue($result);
+        $this->updateItem(PluginNewsAlert::class, $alert_id, ['name' => 'Alert with hidden users (updated)']);
 
         //assert that both users are now in VISIBLE state
         $this->assertSame(PluginNewsAlert_User::VISIBLE, $this->getAlertUserState($alert_user_1_id));
         $this->assertSame(PluginNewsAlert_User::VISIBLE, $this->getAlertUserState($alert_user_2_id));
 
         //re-hide users alerts
-        $alert_user = new PluginNewsAlert_User();
-        $this->assertTrue($alert_user->update(['id' => $alert_user_1_id, 'state' => PluginNewsAlert_User::HIDDEN]));
-        $this->assertTrue($alert_user->update(['id' => $alert_user_2_id, 'state' => PluginNewsAlert_User::HIDDEN]));
+        $this->updateItem(PluginNewsAlert_User::class, $alert_user_1_id, ['state' => PluginNewsAlert_User::HIDDEN]);
+        $this->updateItem(PluginNewsAlert_User::class, $alert_user_2_id, ['state' => PluginNewsAlert_User::HIDDEN]);
 
         //update the alert with is_close_allowed = 0
-        $result = $alert->update(['id' => $alert_id, 'is_close_allowed' => 0]);
-        $this->assertTrue($result);
+        $this->updateItem(PluginNewsAlert::class, $alert_id, ['is_close_allowed' => 0]);
 
         //assert that alerts are visible again
         $this->assertSame(PluginNewsAlert_User::VISIBLE, $this->getAlertUserState($alert_user_1_id));
