@@ -91,11 +91,23 @@ class PluginNewsAlertTest extends DbTestCase
             ['password', 'password2'],
         );
 
+        $user_3   = $this->createItem(
+            User::class,
+            [
+                'name'      => 'user 3',
+                'password'  => 'test',
+                'password2' => 'test',
+            ],
+            ['password', 'password2'],
+        );
+
         $this->assertEquals(User::class, get_class($user_1));
         $this->assertEquals(User::class, get_class($user_2));
+        $this->assertEquals(User::class, get_class($user_3));
 
         $user_1_id = $user_1->getID();
         $user_2_id = $user_2->getID();
+        $user_3_id = $user_3->getID();
 
         $alert_user_1 = $this->createItem(PluginNewsAlert_User::class, [
             'plugin_news_alerts_id' => $alert_id,
@@ -109,11 +121,20 @@ class PluginNewsAlertTest extends DbTestCase
             'state'                 => PluginNewsAlert_User::HIDDEN,
         ]);
 
+        //user 3 has not hidden the alert
+        $alert_user_3 = $this->createItem(PluginNewsAlert_User::class, [
+            'plugin_news_alerts_id' => $alert_id,
+            'users_id'              => $user_3_id,
+            'state'                 => PluginNewsAlert_User::VISIBLE,
+        ]);
+
         $this->assertEquals(PluginNewsAlert_User::class, get_class($alert_user_1));
         $this->assertEquals(PluginNewsAlert_User::class, get_class($alert_user_2));
+        $this->assertEquals(PluginNewsAlert_User::class, get_class($alert_user_3));
 
         $alert_user_1_id = $alert_user_1->getID();
         $alert_user_2_id = $alert_user_2->getID();
+        $alert_user_3_id = $alert_user_3->getID();
 
         $this->updateItem(PluginNewsAlert::class, $alert_id, ['name' => 'Alert with hidden users (updated)']);
 
@@ -121,7 +142,10 @@ class PluginNewsAlertTest extends DbTestCase
         $this->assertSame(PluginNewsAlert_User::VISIBLE, $this->getAlertUserState($alert_user_1_id));
         $this->assertSame(PluginNewsAlert_User::VISIBLE, $this->getAlertUserState($alert_user_2_id));
 
-        //re-hide users alerts
+        //assert that user 3 is still in VISIBLE state
+        $this->assertSame(PluginNewsAlert_User::VISIBLE, $this->getAlertUserState($alert_user_3_id));
+
+        //re-hide users 1 and 2 alerts
         $this->updateItem(PluginNewsAlert_User::class, $alert_user_1_id, ['state' => PluginNewsAlert_User::HIDDEN]);
         $this->updateItem(PluginNewsAlert_User::class, $alert_user_2_id, ['state' => PluginNewsAlert_User::HIDDEN]);
 
@@ -131,6 +155,9 @@ class PluginNewsAlertTest extends DbTestCase
         //assert that alerts are visible again
         $this->assertSame(PluginNewsAlert_User::VISIBLE, $this->getAlertUserState($alert_user_1_id));
         $this->assertSame(PluginNewsAlert_User::VISIBLE, $this->getAlertUserState($alert_user_2_id));
+
+        //assert that user 3 is still in VISIBLE state
+        $this->assertSame(PluginNewsAlert_User::VISIBLE, $this->getAlertUserState($alert_user_3_id));
     }
 
     public function testPostUpdateItemDoesNotAffectOtherAlerts(): void
@@ -180,7 +207,7 @@ class PluginNewsAlertTest extends DbTestCase
                 'is_close_allowed' => 1,
             ],
         );
-        $this->assertEquals(PluginNewsAlert::class, get_class($alert_1));
+        $this->assertEquals(PluginNewsAlert::class, get_class($alert_2));
         $alert_2_id = $alert_2->getID();
 
         $user_1 = $this->createItem(
@@ -213,8 +240,7 @@ class PluginNewsAlertTest extends DbTestCase
         $alert_user_1_id = $alert_user_1->getID();
         $alert_user_2_id = $alert_user_2->getID();
 
-        $alert = new PluginNewsAlert();
-        $alert->update(['id' => $alert_1_id, 'name' => 'Alert 1 (updated)']);
+        $this->updateItem(PluginNewsAlert::class, $alert_1_id, ['name' => 'Alert 1 (updated)']);
 
         $this->assertSame(PluginNewsAlert_User::VISIBLE, $this->getAlertUserState($alert_user_1_id));
         $this->assertSame(PluginNewsAlert_User::HIDDEN, $this->getAlertUserState($alert_user_2_id));
