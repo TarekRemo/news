@@ -68,7 +68,6 @@ class PluginNewsAlertTest extends DbTestCase
                 'is_close_allowed' => 1,
             ],
         );
-        $this->assertEquals(PluginNewsAlert::class, get_class($alert));
         $alert_id = $alert->getID();
 
         $user_1 = $this->createItem(
@@ -101,10 +100,6 @@ class PluginNewsAlertTest extends DbTestCase
             ['password', 'password2'],
         );
 
-        $this->assertEquals(User::class, get_class($user_1));
-        $this->assertEquals(User::class, get_class($user_2));
-        $this->assertEquals(User::class, get_class($user_3));
-
         $user_1_id = $user_1->getID();
         $user_2_id = $user_2->getID();
         $user_3_id = $user_3->getID();
@@ -127,10 +122,6 @@ class PluginNewsAlertTest extends DbTestCase
             'users_id'              => $user_3_id,
             'state'                 => PluginNewsAlert_User::VISIBLE,
         ]);
-
-        $this->assertEquals(PluginNewsAlert_User::class, get_class($alert_user_1));
-        $this->assertEquals(PluginNewsAlert_User::class, get_class($alert_user_2));
-        $this->assertEquals(PluginNewsAlert_User::class, get_class($alert_user_3));
 
         $alert_user_1_id = $alert_user_1->getID();
         $alert_user_2_id = $alert_user_2->getID();
@@ -184,7 +175,6 @@ class PluginNewsAlertTest extends DbTestCase
                 'is_close_allowed' => 1,
             ],
         );
-        $this->assertEquals(PluginNewsAlert::class, get_class($alert_1));
         $alert_1_id = $alert_1->getID();
 
         $alert_2 = $this->createItem(
@@ -207,7 +197,6 @@ class PluginNewsAlertTest extends DbTestCase
                 'is_close_allowed' => 1,
             ],
         );
-        $this->assertEquals(PluginNewsAlert::class, get_class($alert_2));
         $alert_2_id = $alert_2->getID();
 
         $user_1 = $this->createItem(
@@ -219,7 +208,6 @@ class PluginNewsAlertTest extends DbTestCase
             ],
             ['password', 'password2'],
         );
-        $this->assertEquals(User::class, get_class($user_1));
         $user_1_id = $user_1->getID();
 
         $alert_user_1 = $this->createItem(PluginNewsAlert_User::class, [
@@ -233,9 +221,6 @@ class PluginNewsAlertTest extends DbTestCase
             'users_id'              => $user_1_id,
             'state'                 => PluginNewsAlert_User::HIDDEN,
         ]);
-
-        $this->assertEquals(PluginNewsAlert_User::class, get_class($alert_user_1));
-        $this->assertEquals(PluginNewsAlert_User::class, get_class($alert_user_2));
 
         $alert_user_1_id = $alert_user_1->getID();
         $alert_user_2_id = $alert_user_2->getID();
